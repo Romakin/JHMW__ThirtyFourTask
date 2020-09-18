@@ -16,7 +16,9 @@ public class Main {
         countInCurrentThread(arr);
         countInCurrentThreadLambda(arr);
         // после прохождения этих тестов становиться очевидным, что выгодней делать через цикл.
-        countInMultiThread(arr);
+        //countInMultiThread(arr);
+
+        countInForkJoinPool(arr);
     }
 
     public static void countInCurrentThread(List<Integer> arr) {
@@ -36,10 +38,22 @@ public class Main {
         long start = System.currentTimeMillis();
         final double[] sum = {0};
         double mean = 0;
-        arr.stream().forEach(e -> sum[0] += e);
+        arr.forEach(e -> sum[0] += e);
         mean = sum[0]/arr.size();
         long end = System.currentTimeMillis();
         System.out.printf("Lambda тест \n Сумма: %f, Среднее арифметическое: %f \n", sum[0], mean);
+        System.out.printf(" Benchmark: %d \n", (end - start) );
+    }
+
+    public static void countInForkJoinPool(List<Integer> arr) {
+        CounterRecursiveTask crt = new CounterRecursiveTask(arr, -1, -1);
+        long start = System.currentTimeMillis();
+        final Double[] res = new ForkJoinPool().invoke(crt);
+        long end = System.currentTimeMillis();
+        System.out.printf(
+                "ForkJoinPool тест \n Сумма: %f, Среднее арифметическое: %f \n",
+                res[0], res[1]
+        );
         System.out.printf(" Benchmark: %d \n", (end - start) );
     }
 
