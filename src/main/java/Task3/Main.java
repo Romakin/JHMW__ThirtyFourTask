@@ -48,11 +48,12 @@ public class Main {
     public static void countInForkJoinPool(List<Integer> arr) {
         CounterRecursiveTask crt = new CounterRecursiveTask(arr, -1, -1);
         long start = System.currentTimeMillis();
-        final Double[] res = new ForkJoinPool().invoke(crt);
+        final Double res = new ForkJoinPool().invoke(crt);
+        Double mean = res/arr.size();
         long end = System.currentTimeMillis();
         System.out.printf(
                 "ForkJoinPool тест \n Сумма: %f, Среднее арифметическое: %f \n",
-                res[0], res[1]
+                res, mean
         );
         System.out.printf(" Benchmark: %d \n", (end - start) );
     }
